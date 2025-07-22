@@ -96,12 +96,32 @@ exports.handler = async (event, context) => {
     } catch (error) {
         console.error('Email test failed:', error);
         
+        // Provide more detailed error information
+        let errorDetails = error.message;
+        let troubleshooting = '';
+        
+        if (error.code === 'EAUTH') {
+            troubleshooting = 'Authentication failed. Check EMAIL_USER and EMAIL_PASS environment variables.';
+        } else if (error.code === 'ENOTFOUND') {
+            troubleshooting = 'Network error. Check internet connection.';
+        } else if (error.message.includes('Invalid login')) {
+            troubleshooting = 'Invalid Gmail credentials. Verify app password is correct.';
+        } else if (error.message.includes('Less secure')) {
+            troubleshooting = 'Enable 2FA and use app password instead of regular password.';
+        }
+        
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({ 
                 error: 'Email configuration test failed',
-                details: error.message 
+                details: errorDetails,
+                troubleshooting: troubleshooting,
+                envCheck: {
+                    hasEmailUser: !!process.env.EMAIL_USER,
+                    hasEmailPass: !!process.env.EMAIL_PASS,
+                    emailUserValue: process.env.EMAIL_USER ? process.env.EMAIL_USER.substring(0, 3) + '***' : 'not set'
+                }
             })
         };
     }
