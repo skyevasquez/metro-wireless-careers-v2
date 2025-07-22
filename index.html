@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - Metro Wireless Plus</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="metro-wireless-plus-logo.svg" alt="Metro Wireless Plus" class="logo-image">
+                </div>
+            </div>
+            <h1 class="main-title">Join Our Team</h1>
+            <p class="subtitle">Start your career with Metro Wireless Plus - where innovation meets opportunity</p>
+        </header>
+
+        <!-- Application Form -->
+        <main class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fas fa-briefcase"></i> Apply Now</h2>
+                    <p>Fill out the form below to submit your application</p>
+                </div>
+
+                <form id="applicationForm" class="application-form">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-user"></i> Personal Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location Selection -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-map-marker-alt"></i> Preferred Location</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="area">Select Area *</label>
+                                <select id="area" name="area" required>
+                                    <option value="">Choose an area...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="store">Select Store *</label>
+                                <select id="store" name="store" required disabled>
+                                    <option value="">First select an area...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Position Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-clipboard-list"></i> Position Details</h3>
+                        <div class="form-group">
+                            <label for="position">Position of Interest</label>
+                            <select id="position" name="position">
+                                <option value="">Select a position...</option>
+                                <option value="Retail Sales Representative">Retail Sales Representative</option>
+                                <option value="Retail Associate Manager">Retail Associate Manager</option>
+                                <option value="Retail Store Manager">Retail Store Manager</option>
+                                <option value="District Manager">District Manager</option>
+                                <option value="Back office">Back office</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Availability</label>
+                            <select id="availability" name="availability">
+                                <option value="">Select availability...</option>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Flexible">Flexible</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- File Uploads -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-upload"></i> Documents</h3>
+                        <div class="form-row">
+                            <div class="form-group file-upload-group">
+                                <label for="resume">Resume *</label>
+                                <div class="file-upload-area" id="resumeUpload">
+                                    <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+                                    <div class="file-upload-content">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Click to upload or drag and drop</p>
+                                        <span>PDF, DOC, DOCX (Max 5MB)</span>
+                                    </div>
+                                </div>
+                                <div class="file-info" id="resumeInfo"></div>
+                            </div>
+                            <div class="form-group file-upload-group">
+                                <label for="coverLetter">Cover Letter (Optional)</label>
+                                <div class="file-upload-area" id="coverLetterUpload">
+                                    <input type="file" id="coverLetter" name="coverLetter" accept=".pdf,.doc,.docx">
+                                    <div class="file-upload-content">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Click to upload or drag and drop</p>
+                                        <span>PDF, DOC, DOCX (Max 5MB)</span>
+                                    </div>
+                                </div>
+                                <div class="file-info" id="coverLetterInfo"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-comment"></i> Additional Information</h3>
+                        <div class="form-group">
+                            <label for="message">Tell us about yourself (Optional)</label>
+                            <textarea id="message" name="message" rows="4" placeholder="Share any additional information about your experience, skills, or why you'd like to work with Metro Wireless Plus..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Submit Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="fas fa-check-circle"></i>
+                    <h2>Application Submitted!</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Thank you for your interest in Metro Wireless Plus. Your application has been successfully submitted and sent to our hiring team.</p>
+                    <p>We will review your application and contact you within 3-5 business days if your qualifications match our current openings.</p>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeModal()" class="modal-btn">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Metro Wireless Plus. All rights reserved.</p>
+            <p>Equal Opportunity Employer</p>
+            <p class="built-by">Built by <a href="https://applylogics.com" target="_blank" rel="noopener noreferrer">Applylogics.com</a></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
