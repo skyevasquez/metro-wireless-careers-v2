@@ -131,47 +131,57 @@
         async function testSubmitFunctionDetailed() {
             addResult('🔍 Testing submit function with detailed error reporting...', 'info');
             
-            // Create sample form data
-            const formData = new FormData();
-            formData.append('firstName', 'Debug');
-            formData.append('lastName', 'Test');
-            formData.append('email', 'debug@test.com');
-            formData.append('phone', '555-DEBUG-TEST');
-            formData.append('position', 'Test Position');
-            formData.append('availability', 'Full-time');
-            formData.append('storeCode', 'DEBUG001');
-            formData.append('storeName', 'Debug Test Store');
-            formData.append('storeAddress', '123 Debug St');
-            formData.append('storeCity', 'Debug City');
-            formData.append('storeArea', 'Debug Area');
-            formData.append('districtManager', 'Debug Manager');
-            formData.append('recruitingManager', 'debug@metrowirelessplus.com');
-            formData.append('message', 'This is a detailed debug test submission');
-            
-            // Create a small test file
-            const testFile = new Blob(['Debug test resume content for troubleshooting'], { type: 'text/plain' });
-            formData.append('resume', testFile, 'debug-test-resume.txt');
-            
             try {
-                const response = await fetch('/.netlify/functions/submit-application', {
+                const testData = {
+                    debug: true,
+                    firstName: 'Debug',
+                    lastName: 'Test',
+                    email: 'debug@test.com',
+                    phone: '555-DEBUG-TEST',
+                    position: 'Test Position',
+                    availability: 'Full-time',
+                    message: 'This is a detailed debug test submission',
+                    storeInfo: JSON.stringify({
+                        name: 'Debug Test Store',
+                        code: 'DEBUG001',
+                        address: '123 Debug St',
+                        city: 'Debug City',
+                        area: 'Debug Area'
+                    })
+                };
+
+                const response = await fetch('/.netlify/functions/debug-submit', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
                 });
-                
-                const data = await response.json();
+
+                const result = await response.json();
                 
                 if (response.ok) {
-                    addResult(`✅ SUBMIT TEST SUCCESS: ${data.message}`, 'success');
+                    addResult(`✅ SUBMIT TEST SUCCESS: ${result.message || 'Form submission test successful!'}`, 'success');
+                    if (result.environment) {
+                        addResult(`📧 Environment Variables:`, 'info');
+                        addResult(`<div class="json-output">${JSON.stringify(result.environment, null, 2)}</div>`, 'info');
+                    }
+                    if (result.transporter) {
+                        addResult(`🔧 Email Transporter: ${result.transporter}`, 'info');
+                    }
                 } else {
                     addResult(`❌ SUBMIT TEST FAILED:`, 'error');
                     addResult(`Status Code: ${response.status}`, 'error');
-                    addResult(`Error: ${data.error}`, 'error');
-                    if (data.details) {
-                        addResult(`Details: ${data.details}`, 'error');
+                    addResult(`Error: ${result.error || 'Unknown error'}`, 'error');
+                    if (result.details) {
+                        addResult(`Details: ${result.details}`, 'error');
+                    }
+                    if (result.stack) {
+                        addResult(`Stack: ${result.stack}`, 'error');
                     }
                 }
             } catch (error) {
-                addResult(`💥 SUBMIT NETWORK ERROR: ${error.message}`, 'error');
+                addResult(`❌ SUBMIT TEST ERROR: ${error.message}`, 'error');
             }
         }
 
