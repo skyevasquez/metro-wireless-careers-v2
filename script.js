@@ -376,8 +376,23 @@ applicationForm.addEventListener('submit', async function(e) {
         });
         
     } catch (error) {
-        console.error('Submission error:', error);
-        alert('There was an error submitting your application. Please try again.');
+        console.error('Main form submission error:', error);
+        
+        // Provide more specific error messages
+        let errorMessage = 'There was an error submitting your application. Please try again.';
+        
+        if (error.message.includes('JSON')) {
+            errorMessage = 'Server response error. Your application may have been submitted - please check your email for confirmation before trying again.';
+        } else if (error.message.includes('Network')) {
+            errorMessage = 'Network error. Please check your internet connection and try again.';
+        } else if (error.message.includes('Failed to submit application')) {
+            errorMessage = error.message;
+        }
+        
+        alert(errorMessage);
+        
+        // Also show a notification
+        showNotification(errorMessage, 'error');
     } finally {
         // Restore button
         submitBtn.innerHTML = originalText;
@@ -388,14 +403,30 @@ applicationForm.addEventListener('submit', async function(e) {
 // Submit form to Netlify function
 async function simulateFormSubmission(formData) {
     try {
+        console.log('Starting form submission...');
+        
         const response = await fetch('/.netlify/functions/submit-application', {
             method: 'POST',
             body: formData
         });
 
-        const result = await response.json();
+        console.log('Response received:', {
+            status: response.status,
+            statusText: response.statusText,
+            ok: response.ok
+        });
+
+        let result;
+        try {
+            result = await response.json();
+            console.log('Response JSON:', result);
+        } catch (jsonError) {
+            console.error('Failed to parse response JSON:', jsonError);
+            throw new Error('Server response was not valid JSON');
+        }
 
         if (response.ok && result.success) {
+            console.log('Form submission successful!');
             showNotification(result.message || 'Application submitted successfully! Check your email for confirmation.', 'success');
             
             // Reset form after successful submission
@@ -419,11 +450,17 @@ async function simulateFormSubmission(formData) {
                     });
             }, 2000);
         } else {
+            console.error('Form submission failed:', {
+                responseOk: response.ok,
+                resultSuccess: result.success,
+                error: result.error
+            });
             throw new Error(result.error || 'Failed to submit application');
         }
     } catch (error) {
-        console.error('Submission error:', error);
-        showNotification(error.message || 'Failed to submit application. Please try again.', 'error');
+        console.error('Form submission error:', error);
+        // Re-throw to be caught by the main form handler
+        throw error;
     }
 }
 
