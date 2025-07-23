@@ -390,9 +390,6 @@ applicationForm.addEventListener('submit', async function(e) {
         }
         
         alert(errorMessage);
-        
-        // Also show a notification
-        showNotification(errorMessage, 'error');
     } finally {
         // Restore button
         submitBtn.innerHTML = originalText;
@@ -427,28 +424,9 @@ async function simulateFormSubmission(formData) {
 
         if (response.ok && result.success) {
             console.log('Form submission successful!');
-            showNotification(result.message || 'Application submitted successfully! Check your email for confirmation.', 'success');
             
-            // Reset form after successful submission
-            setTimeout(() => {
-                document.getElementById('applicationForm').reset();
-                document.getElementById('resumeFileName').textContent = '';
-                document.getElementById('coverLetterFileName').textContent = '';
-                
-                // Reset store selection
-                const storeSelect = document.getElementById('storeSelect');
-                storeSelect.innerHTML = '<option value="">Select a store location...</option>';
-                
-                // Reload stores
-                fetch('/.netlify/functions/stores')
-                    .then(response => response.json())
-                    .then(data => {
-                        populateStores(data);
-                    })
-                    .catch(error => {
-                        console.error('Error reloading stores:', error);
-                    });
-            }, 2000);
+            return result;
+            
         } else {
             console.error('Form submission failed:', {
                 responseOk: response.ok,
@@ -570,4 +548,74 @@ document.addEventListener('DOMContentLoaded', loadFormData);
 // Clear saved data on successful submission
 function clearSavedData() {
     localStorage.removeItem('metroWirelessApplication');
+}
+
+// Show notification function
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+        <button class="notification-close" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    // Add styles if not already present
+    if (!document.getElementById('notification-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'notification-styles';
+        styles.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                padding: 16px;
+                max-width: 400px;
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                border-left: 4px solid #007bff;
+                animation: slideIn 0.3s ease-out;
+            }
+            .notification-success { border-left-color: #28a745; }
+            .notification-error { border-left-color: #dc3545; }
+            .notification-content {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex: 1;
+            }
+            .notification-close {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: #666;
+                padding: 4px;
+            }
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
 }
