@@ -34,7 +34,8 @@ const storeData = {
             { code: "70851447", name: "Commerical", address: "4385 Commercial Way", city: "Spring Hill" },
             { code: "70851448", name: "Homosassa", address: "4524 S Suncoast Blvd", city: "Homosassa" },
             { code: "70814856", name: "Tavares", address: "460 E Burleigh Blvd", city: "Tavares" },
-            { code: "70851130", name: "Pembroke Rd", address: "6776 Pembroke Rd", city: "PEMBROKE PINES" }
+            { code: "70851130", name: "Pembroke Rd", address: "6776 Pembroke Rd", city: "PEMBROKE PINES" },
+            { code: "70851XXX", name: "Crystal River", address: "TBD", city: "Crystal River" }
         ]
     },
     "Florida - South": {
